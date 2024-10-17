@@ -1,8 +1,11 @@
 "use client";
+
+import ClientSessionProvider from "@/components/ClientSessionProvider"; // Importa el nuevo componente
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { signIn, getSession  } from "next-auth/react";
 import {useRouter} from 'next/navigation'
 import {useState} from 'react'
+import { useSession } from "next-auth/react"; // Asegúrate de tener este import
 
 function LoginPage() {
   const {
@@ -24,14 +27,25 @@ function LoginPage() {
 
     console.log(res)
     if (res.error) {
-      setError(res.error)
+      setError(res.error);
     } else {
-      router.push('/dashboard')
+      const session = await getSession(); // Obtiene la sesión actualizada
+      console.log("Session after login:", session); // Verifica la sesión actualizada
+
+      // Redirige según el rol del usuario
+      if (session?.user?.role === 'DOCTOR') {
+        router.push('/dashboard/doctor');
+      } else if (session?.user?.role === 'CLIENT') {
+        router.push('/dashboard/client');
+      } else {
+        router.push('/dashboard');
+      }
       router.refresh()
     }
   });
 
   return (
+    <ClientSessionProvider> {/* Envuelve la página de Login */}
     <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
       <form onSubmit={onSubmit} className="w-1/4">
 
@@ -86,6 +100,7 @@ function LoginPage() {
         </button>
       </form>
     </div>
+    </ClientSessionProvider>
   );
 }
 export default LoginPage;

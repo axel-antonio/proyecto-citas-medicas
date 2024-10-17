@@ -46,6 +46,7 @@ export async function POST(request) {
         username: data.username,
         email: data.email,
         password: hashedPassword,
+        role: data.role, // Asigna el rol aquí
       },
     });
 

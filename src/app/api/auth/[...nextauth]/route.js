@@ -32,14 +32,28 @@ export const authOptions = {
             id: userFound.id,
             name: userFound.username,
             email: userFound.email,
+            role: userFound.role, // Incluye el rol en la respuesta
         }
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role; // Almacena el rol en el token JWT
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.role = token.role; // Almacena el rol en la sesión
+      return session;
+    }
+  },
   pages: {
     signIn: "/auth/login",
   }
 };
+
 
 const handler = NextAuth(authOptions);
 

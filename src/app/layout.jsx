@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import { Inter } from "next/font/google";
+import ClientSessionProvider from "@/components/ClientSessionProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -13,8 +14,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        {children}
+      <ClientSessionProvider> {/* Envolver todo el contenido con ClientSessionProvider */}
+          <Navbar />
+          {children}
+        </ClientSessionProvider>
       </body>
     </html>
   );

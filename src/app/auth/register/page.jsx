@@ -21,6 +21,7 @@ function RegisterPage() {
         username: data.username,
         email: data.email,
         password: data.password,
+        role: data.role,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -120,6 +121,27 @@ function RegisterPage() {
             {errors.confirmPassword.message}
           </span>
         )}
+{/* Campo de selección para el rol */}
+<label htmlFor="role" className="text-slate-500 mb-2 block text-sm">
+          Role:
+        </label>
+        <select
+          {...register("role", {
+            required: {
+              value: true,
+              message: "Role is required",
+            },
+          })}
+          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+        >
+          <option value="DOCTOR">Doctor</option>
+          <option value="CLIENT">Client</option>
+        </select>
+        {errors.role && (
+          <span className="text-red-500 text-sm">{errors.role.message}</span>
+        )}
+
+
 
         <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
           Register
